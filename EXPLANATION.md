@@ -7,9 +7,9 @@ for four different values of *k*: 2, 3, 4, and 5.
 
 However, the script contained an incorrect line:
 
-```python
+
 k = min(k, 3)
-````
+
 
 This forced `k` never to exceed 3, meaning:
 
@@ -26,9 +26,8 @@ The script was not performing clustering for the intended number of clusters.
 The fix was simply to remove the cap on k and pass the correct value to the
 clustering function:
 
-```python
 k=k,
-```
+
 
 Now each iteration correctly runs K-means with the intended number of clusters.
 

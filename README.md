@@ -74,17 +74,6 @@ This folder contains package metadata used internally by Python (file lists,
 version information, etc.). It is generated automatically and should not be
 edited.
 
-Of course brother — here is a **polished, professional README section** written so that you can **append it** to your existing README.md without replacing anything.
-
-Just **copy + paste** it at the end of your current README.
-
----
-
-# 📄 **APPENDABLE README SECTION (clean, polished, exam-ready)**
-
-```markdown
----
-
 # 📘 MA52109 Mock Practical – Student Submission Overview
 
 This repository contains my completed submission for the MA52109: Programming for Data Science mock practical.  

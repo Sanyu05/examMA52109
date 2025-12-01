@@ -32,6 +32,9 @@ from .algorithms import (
     update_centroids,
 )
 
+from .agglomerative import agglomerative_clustering
+
+
 # --- Evaluation ---
 from .evaluation import (
     compute_inertia,
@@ -81,4 +84,7 @@ __all__ = [
 
     # High-level orchestration
     "run_clustering",
+
+    "agglomerative_clustering",
+
 ]

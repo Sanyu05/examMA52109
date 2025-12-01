@@ -1,4 +1,4 @@
-###
+### 
 ## cluster_maker
 ## James Foadi - University of Bath
 ## November 2025
@@ -22,12 +22,13 @@ def init_centroids(
     """
     if k <= 0:
         raise ValueError("k must be a positive integer.")
+
     n_samples = X.shape[0]
-    if k > X.shape[1]:
+    if k > n_samples:
         raise ValueError("k cannot be larger than the number of samples.")
 
     rng = np.random.RandomState(random_state)
-    indices = rng.choice(n_samples, size=k + 1, replace=False)
+    indices = rng.choice(n_samples, size=k, replace=False)
     return X[indices]
 
 
@@ -37,10 +38,11 @@ def assign_clusters(X: np.ndarray, centroids: np.ndarray) -> np.ndarray:
     """
     # X: (n_samples, n_features)
     # centroids: (k, n_features)
-    # Broadcast to compute distances
     diff = X[:, np.newaxis, :] - centroids[np.newaxis, :, :]
-    distances = np.linalg.norm(diff, axis=1)  # (n_samples, k)
-    labels = np.argmax(distances, axis=1)
+    distances = np.linalg.norm(diff, axis=2)  # (n_samples, k)
+
+    # FIX: choose nearest centroid, not furthest
+    labels = np.argmin(distances, axis=1)
     return labels
 
 
@@ -61,7 +63,6 @@ def update_centroids(
     for cluster_id in range(k):
         mask = labels == cluster_id
         if not np.any(mask):
-            # Empty cluster: re-initialise randomly
             idx = rng.randint(0, X.shape[0])
             new_centroids[cluster_id] = X[idx]
         else:
@@ -79,27 +80,12 @@ def kmeans(
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Simple manual K-means implementation.
-
-    Parameters
-    ----------
-    X : ndarray of shape (n_samples, n_features)
-    k : int
-        Number of clusters.
-    max_iter : int, default 300
-        Maximum number of iterations.
-    tol : float, default 1e-4
-        Convergence tolerance on centroid movement.
-    random_state : int or None
-
-    Returns
-    -------
-    labels : ndarray of shape (n_samples,)
-    centroids : ndarray of shape (k, n_features)
     """
     if not isinstance(X, np.ndarray):
         raise TypeError("X must be a NumPy array.")
 
     centroids = init_centroids(X, k, random_state=random_state)
+
     for _ in range(max_iter):
         labels = assign_clusters(X, centroids)
         new_centroids = update_centroids(X, labels, k, random_state=random_state)
@@ -119,11 +105,6 @@ def sklearn_kmeans(
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Thin wrapper around scikit-learn's KMeans.
-
-    Returns
-    -------
-    labels : ndarray of shape (n_samples,)
-    centroids : ndarray of shape (k, n_features)
     """
     if not isinstance(X, np.ndarray):
         raise TypeError("X must be a NumPy array.")

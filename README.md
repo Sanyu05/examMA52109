@@ -114,7 +114,7 @@ The original demo script capped the number of clusters using:
 
 ```python
 k = min(k, 3)
-````
+```
 
 This caused incorrect behaviour when running for `k = 4` and `k = 5`.
 
